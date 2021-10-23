@@ -1,0 +1,185 @@
+swagger: '2.0'
+info:
+  description: >-
+    API MVP para cadastro de clientes.
+  version: 1.0.0
+  title: service-java-rest-api
+host: service-java-rest-api.com
+basePath: /api
+schemes:
+  - https
+paths:
+  '/customers/v1':
+    post:
+      summary: save
+      operationId: insertCustomers
+      parameters:
+        - in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/insertCustomers'
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/customersResponse'
+        '400':
+          description: 400 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '404':
+          description: 404 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '500':
+          description: 500 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+    put:
+      summary: update
+      operationId: updateCustomers
+      parameters:
+        - in: body
+          name: payload
+          required: true
+          schema:
+            $ref: '#/definitions/updateCustomers'
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/customersResponse'
+        '400':
+          description: 400 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '404':
+          description: 404 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '500':
+          description: 500 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+  '/customers/v1/searchCustomers':
+    get:
+      operationId: searchCustomers
+      summary: searchCustomers
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: query
+          required: true
+          type: string
+        - name: page
+          in: header
+          required: true
+          type: string
+        - name: size
+          in: header
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/SearchCustomers'
+        '400':
+          description: 400 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '404':
+          description: 404 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '500':
+          description: 500 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+  '/customers/v1/{id}':
+    get:
+      summary: findById
+      operationId: findById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          schema:
+            $ref: '#/definitions/findByIdCustomers'
+        '400':
+          description: 400 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '404':
+          description: 404 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+        '500':
+          description: 500 response
+          schema:
+            $ref: '#/definitions/statusProcessamentoType'
+definitions:
+  SearchCustomers:
+    allOf:
+      - $ref: '#/definitions/statusProcessamentoType'
+      - type: object
+        properties:
+          resultado:
+            $ref: '#/definitions/Customers'
+  findByIdCustomers:
+    allOf:
+      - $ref: '#/definitions/statusProcessamentoType'
+      - type: object
+        properties:
+          resultado:
+            $ref: '#/definitions/Customers'
+  insertCustomers:
+    type: object
+    properties:
+      nome:
+        type: string
+      idade:
+        type: integer
+  updateCustomers:
+    type: object
+    properties:
+      codigo:
+        type: integer
+      nome:
+        type: string
+      idade:
+        type: integer
+  Customers:
+    type: object
+    properties:
+      codigo:
+        type: integer
+      nome:
+        type: string
+      idade:
+        type: integer
+  customersResponse:
+    allOf:
+      - $ref: '#/definitions/statusProcessamentoType'
+      - type: object
+        properties:
+          resultado:
+            $ref: '#/definitions/Customers'
+  statusProcessamentoType:
+    type: object
+    required:
+      - codigo
+      - descricao
+    properties:
+      codigo:
+        type: integer
+      descricao:
+        type: string
